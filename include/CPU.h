@@ -40,7 +40,22 @@ class CPU {
         // Substract Memory from Accumulator with Borrow
         static constexpr byte SBC_IM = 0xE9;    // 2 cycles
 
+        // Decimal Flag
+        static constexpr byte CLD = 0xD8;   // 2 cycles
+        static constexpr byte SED = 0xF8;   // 2 cycles
+
+        // Interrupt Flag
+        static constexpr byte CLI = 0x58;   // 2 cycles
+        static constexpr byte SEI = 0x78;   // 2 cycles
+
+        // Carry Flag
+        static constexpr byte CLC = 0x18;   // 2 cycles
         static constexpr byte SEC = 0x38;   // 2 cycles
+
+        // Overflow Flag
+        static constexpr byte CLV = 0xB8;   // 2 cycles
+
+        
 
 
     public:

@@ -76,8 +76,32 @@ void CPU::execute(byte cycles) {
                 setStatusSBC(value, result);
                 acc = result & 0x00FF;
             } break;
+            case CLD:{
+                flags.bits.d = 0;
+                cycles--;
+            } break;
+            case SED:{
+                flags.bits.d = 1;
+                cycles--;
+            } break;
+            case CLI:{
+                flags.bits.i = 0;
+                cycles--;
+            } break;
+            case SEI:{
+                flags.bits.i = 1;
+                cycles--;
+            } break;
+            case CLC:{
+                flags.bits.c = 0;
+                cycles--;
+            } break;
             case SEC:{
                 flags.bits.c = 1;
+                cycles--;
+            } break;
+            case CLV:{
+                flags.bits.v = 0;
                 cycles--;
             } break;
         }
