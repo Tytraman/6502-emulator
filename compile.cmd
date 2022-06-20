@@ -1,0 +1,1 @@
+g++ -Wall -Werror *.cpp include/src/*.cpp -Iinclude -o 6502.exe
