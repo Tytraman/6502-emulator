@@ -14,99 +14,99 @@ void CPU::reset() {
     mem.init();
 }
 
-void CPU::execute() {
+bool CPU::execute() {
     byte value;
 
     instruction = fetchByte(cycles);
     cycles = instructions[instruction].cycles - 1;
+    switch(instruction) {
+        default: return false;
+        case Instruction::LDA_IM:{
+            value = fetchByte(cycles);
+            acc = value;
+            setStatusLDA();
+        } return true;
+        case Instruction::LDA_ZP:{
+            value = fetchByte(cycles);
+            acc = readByte(cycles, value);
+            setStatusLDA();
+        } return true;
+        case Instruction::LDA_ZP_X:{
+            value = fetchByte(cycles);
+            value += x;
+            cycles--;
+            acc = readByte(cycles, value);
+            setStatusLDA();
+        } return true;
+        case Instruction::LDA_ZP_X_IND:{
+            value = fetchByte(cycles);
+            x += value;
+            cycles--;
+            word address = readWord(cycles, x);
+            acc = readByte(cycles, address);
+            setStatusLDA();
+        } return true;
+        case Instruction::LDA_ABS:{
+            word address = fetchWord(cycles);
+            acc = readByte(cycles, address);
+            setStatusLDA();
+        } return true;
+        case Instruction::JMP_ABS:{
+            pc = fetchWord(cycles);
+        } return true;
+        case Instruction::JMP_ABS_IND:{
+            word address = fetchWord(cycles);
+            pc = readWord(cycles, address);
+        } return true;
+        case Instruction::JSR:{
+            word address = fetchWord(cycles);
+            writeStackWord(cycles, pc - 1);
+            pc = address;
+            cycles--;
+        } return true;
+        case Instruction::ADC_IM:{
+            value = fetchByte(cycles);
+            word result = acc + value + flags.bits.c;
+            setStatusADC(value, result);
+            acc = result & 0x00FF;
+        } return true;
+        case Instruction::SBC_IM:{
+            value = ~fetchByte(cycles);
+            word result = acc + value + flags.bits.c;
+            setStatusSBC(value, result);
+            acc = result & 0x00FF;
+        } return true;
+        case Instruction::CLD:{
+            flags.bits.d = 0;
+            cycles--;
+        } return true;
+        case Instruction::SED:{
+            flags.bits.d = 1;
+            cycles--;
+        } return true;
+        case Instruction::CLI:{
+            flags.bits.i = 0;
+            cycles--;
+        } return true;
+        case Instruction::SEI:{
+            flags.bits.i = 1;
+            cycles--;
+        } return true;
+        case Instruction::CLC:{
+            flags.bits.c = 0;
+            cycles--;
+        } return true;
+        case Instruction::SEC:{
+            flags.bits.c = 1;
+            cycles--;
+        } return true;
+        case Instruction::CLV:{
+            flags.bits.v = 0;
+            cycles--;
+        } return true;
+        case Instruction::RTS:{
 
-    while(cycles > 0) {
-        switch(instruction) {
-            default: break;
-            case Instruction::LDA_IM:{
-                value = fetchByte(cycles);
-                acc = value;
-                setStatusLDA();
-            } break;
-            case Instruction::LDA_ZP:{
-                value = fetchByte(cycles);
-                acc = readByte(cycles, value);
-                setStatusLDA();
-            } break;
-            case Instruction::LDA_ZP_X:{
-                value = fetchByte(cycles);
-                value += x;
-                cycles--;
-                acc = readByte(cycles, value);
-                setStatusLDA();
-            } break;
-            case Instruction::LDA_ZP_X_IND:{
-                value = fetchByte(cycles);
-                x += value;
-                cycles--;
-                word address = readWord(cycles, x);
-                acc = readByte(cycles, address);
-                setStatusLDA();
-            } break;
-            case Instruction::LDA_ABS:{
-                word address = fetchWord(cycles);
-                acc = readByte(cycles, address);
-                setStatusLDA();
-            } break;
-            case Instruction::JMP_ABS:{
-                pc = fetchWord(cycles);
-            } break;
-            case Instruction::JMP_ABS_IND:{
-                word address = fetchWord(cycles);
-                pc = readWord(cycles, address);
-            } break;
-            case Instruction::JSR:{
-                word address = fetchWord(cycles);
-                writeStackWord(cycles, pc - 1);
-                pc = address;
-                cycles--;
-            } break;
-            case Instruction::ADC_IM:{
-                value = fetchByte(cycles);
-                word result = acc + value + flags.bits.c;
-                setStatusADC(value, result);
-                acc = result & 0x00FF;
-            } break;
-            case Instruction::SBC_IM:{
-                value = ~fetchByte(cycles);
-                word result = acc + value + flags.bits.c;
-                setStatusSBC(value, result);
-                acc = result & 0x00FF;
-            } break;
-            case Instruction::CLD:{
-                flags.bits.d = 0;
-                cycles--;
-            } break;
-            case Instruction::SED:{
-                flags.bits.d = 1;
-                cycles--;
-            } break;
-            case Instruction::CLI:{
-                flags.bits.i = 0;
-                cycles--;
-            } break;
-            case Instruction::SEI:{
-                flags.bits.i = 1;
-                cycles--;
-            } break;
-            case Instruction::CLC:{
-                flags.bits.c = 0;
-                cycles--;
-            } break;
-            case Instruction::SEC:{
-                flags.bits.c = 1;
-                cycles--;
-            } break;
-            case Instruction::CLV:{
-                flags.bits.v = 0;
-                cycles--;
-            } break;
-        }
+        } return true;
     }
 }
 

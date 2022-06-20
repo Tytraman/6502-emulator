@@ -60,13 +60,10 @@ int main() {
     cpu.mem.data[0x6007] = 0;
     cpu.mem.data[0x6008] = Instruction::SEC;
     cpu.mem.data[0x6009] = Instruction::SBC_IM;
-    cpu.mem.data[0x600A] = 2;
+    cpu.mem.data[0x600A] = 1;
 
-    unsigned int i = 0;
-    while(i < 15) {
-        cpu.execute();
+    while(cpu.execute()) {
         cpu.printData();
-        i++;
     }
 
     printf("Au revoir !\n");

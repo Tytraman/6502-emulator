@@ -39,6 +39,8 @@ class Instruction {
         // Overflow Flag
         static constexpr byte CLV = 0xB8;   // 2 cycles
 
+        static constexpr byte RTS = 0x60;   // 6 cycles
+
     public:
         const char *name;
         const byte cycles;

@@ -42,7 +42,7 @@ class CPU {
 
         void reset();
 
-        void execute();
+        bool execute();
         byte fetchByte(byte &cycles);
         word fetchWord(byte &cycles);
 
