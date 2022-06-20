@@ -3,6 +3,7 @@
 
 #include <types.h>
 #include <memory.h>
+#include <instruction.h>
 
 class CPU {
 
@@ -22,43 +23,6 @@ class CPU {
         } Flags;
 
     public:
-        // LDA
-        static constexpr byte LDA_IM       = 0xA9;  // 2 cycles
-        static constexpr byte LDA_ZP       = 0xA5;  // 3 cycles
-        static constexpr byte LDA_ZP_X     = 0xB5;  // 4 cycles
-        static constexpr byte LDA_ZP_X_IND = 0xA1;  // 6 cycles
-        static constexpr byte LDA_ABS      = 0xAD;  // 4 cycles
-
-        // JUMP
-        static constexpr byte JMP_ABS = 0x4C;       // 3 cycles
-        static constexpr byte JMP_ABS_IND = 0x6C;   // 5 cycles
-        static constexpr byte JSR = 0x20;           // 6 cycles
-
-        // Add Memory to Accumulator with Carry
-        static constexpr byte ADC_IM = 0x69;    // 2 cycles
-
-        // Substract Memory from Accumulator with Borrow
-        static constexpr byte SBC_IM = 0xE9;    // 2 cycles
-
-        // Decimal Flag
-        static constexpr byte CLD = 0xD8;   // 2 cycles
-        static constexpr byte SED = 0xF8;   // 2 cycles
-
-        // Interrupt Flag
-        static constexpr byte CLI = 0x58;   // 2 cycles
-        static constexpr byte SEI = 0x78;   // 2 cycles
-
-        // Carry Flag
-        static constexpr byte CLC = 0x18;   // 2 cycles
-        static constexpr byte SEC = 0x38;   // 2 cycles
-
-        // Overflow Flag
-        static constexpr byte CLV = 0xB8;   // 2 cycles
-
-        
-
-
-    public:
         word pc;    // Program counter (Emplacement de la prochaine instruction à exécuter)
         byte sp;    // Stack pointer (Emplacement de la dernière valeur dans la pile)
 
@@ -69,12 +33,16 @@ class CPU {
 
         Memory mem;
 
+        Instruction *instructions;
+        byte instruction;
+        byte cycles;
+
     public:
-        CPU(unsigned int maxMemoryCapacity);
+        CPU(unsigned int maxMemoryCapacity, Instruction instructions[256]);
 
         void reset();
 
-        void execute(byte cycles);
+        void execute();
         byte fetchByte(byte &cycles);
         word fetchWord(byte &cycles);
 

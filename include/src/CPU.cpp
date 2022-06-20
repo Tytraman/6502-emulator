@@ -1,7 +1,8 @@
 #include <CPU.h>
 #include <stdio.h>
 
-CPU::CPU(unsigned int maxMemoryCapacity) : mem(maxMemoryCapacity) {}
+CPU::CPU(unsigned int maxMemoryCapacity, Instruction _instructions[256]) :
+    mem(maxMemoryCapacity), instructions(_instructions) {}
 
 void CPU::reset() {
     pc = 0xFFFC;
@@ -13,32 +14,33 @@ void CPU::reset() {
     mem.init();
 }
 
-void CPU::execute(byte cycles) {
-    byte instruction;
+void CPU::execute() {
     byte value;
 
+    instruction = fetchByte(cycles);
+    cycles = instructions[instruction].cycles - 1;
+
     while(cycles > 0) {
-        instruction = fetchByte(cycles);
         switch(instruction) {
             default: break;
-            case LDA_IM:{
+            case Instruction::LDA_IM:{
                 value = fetchByte(cycles);
                 acc = value;
                 setStatusLDA();
             } break;
-            case LDA_ZP:{
+            case Instruction::LDA_ZP:{
                 value = fetchByte(cycles);
                 acc = readByte(cycles, value);
                 setStatusLDA();
             } break;
-            case LDA_ZP_X:{
+            case Instruction::LDA_ZP_X:{
                 value = fetchByte(cycles);
                 value += x;
                 cycles--;
                 acc = readByte(cycles, value);
                 setStatusLDA();
             } break;
-            case LDA_ZP_X_IND:{
+            case Instruction::LDA_ZP_X_IND:{
                 value = fetchByte(cycles);
                 x += value;
                 cycles--;
@@ -46,61 +48,61 @@ void CPU::execute(byte cycles) {
                 acc = readByte(cycles, address);
                 setStatusLDA();
             } break;
-            case LDA_ABS:{
+            case Instruction::LDA_ABS:{
                 word address = fetchWord(cycles);
                 acc = readByte(cycles, address);
                 setStatusLDA();
             } break;
-            case JMP_ABS:{
+            case Instruction::JMP_ABS:{
                 pc = fetchWord(cycles);
             } break;
-            case JMP_ABS_IND:{
+            case Instruction::JMP_ABS_IND:{
                 word address = fetchWord(cycles);
                 pc = readWord(cycles, address);
             } break;
-            case JSR:{
+            case Instruction::JSR:{
                 word address = fetchWord(cycles);
                 writeStackWord(cycles, pc - 1);
                 pc = address;
                 cycles--;
             } break;
-            case ADC_IM:{
+            case Instruction::ADC_IM:{
                 value = fetchByte(cycles);
                 word result = acc + value + flags.bits.c;
                 setStatusADC(value, result);
                 acc = result & 0x00FF;
             } break;
-            case SBC_IM:{
+            case Instruction::SBC_IM:{
                 value = ~fetchByte(cycles);
                 word result = acc + value + flags.bits.c;
                 setStatusSBC(value, result);
                 acc = result & 0x00FF;
             } break;
-            case CLD:{
+            case Instruction::CLD:{
                 flags.bits.d = 0;
                 cycles--;
             } break;
-            case SED:{
+            case Instruction::SED:{
                 flags.bits.d = 1;
                 cycles--;
             } break;
-            case CLI:{
+            case Instruction::CLI:{
                 flags.bits.i = 0;
                 cycles--;
             } break;
-            case SEI:{
+            case Instruction::SEI:{
                 flags.bits.i = 1;
                 cycles--;
             } break;
-            case CLC:{
+            case Instruction::CLC:{
                 flags.bits.c = 0;
                 cycles--;
             } break;
-            case SEC:{
+            case Instruction::SEC:{
                 flags.bits.c = 1;
                 cycles--;
             } break;
-            case CLV:{
+            case Instruction::CLV:{
                 flags.bits.v = 0;
                 cycles--;
             } break;
@@ -185,9 +187,10 @@ void CPU::printData() const {
         "[ACC]   %02x\n"
         "[REG X] %02x\n"
         "[REG Y] %02x\n"
+        "[INS]   %s\n"
         "Flags:\n"
         "[N] %d [V] %d [U] %d [B] %d [D] %d [I] %d [Z] %d [C] %d\n",
-        pc, sp, acc, x, y,
+        pc, sp, acc, x, y, instructions[instruction].name,
         flags.bits.n, flags.bits.v, flags.bits.u, flags.bits.b, flags.bits.d, flags.bits.i, flags.bits.z, flags.bits.c
     );
 }
