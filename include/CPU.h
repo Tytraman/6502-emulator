@@ -43,14 +43,17 @@ class CPU {
         void reset();
 
         bool execute();
-        byte fetchByte(byte &cycles);
-        word fetchWord(byte &cycles);
+        byte fetchByte();
+        word fetchWord();
 
-        byte readByte(byte &cycles, word address);
-        word readWord(byte &cycles, word address);
+        byte readByte(word address);
+        word readWord(word address);
 
-        void writeStackByte(byte &cycles, byte value);
-        void writeStackWord(byte &cycles, word value);
+        byte readStackByte();
+        word readStackWord();
+
+        void writeStackByte(byte value);
+        void writeStackWord(word value);
 
         byte negate(byte value) const;
 

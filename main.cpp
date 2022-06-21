@@ -45,6 +45,9 @@ int main() {
     cpu.mem.data[0x5104] = 0x00;
     cpu.mem.data[0x5105] = 0x60;
 
+    cpu.mem.data[0x5106] = Instruction::LDA_IM;
+    cpu.mem.data[0x5107] = 0xBA;
+
     cpu.x = 0x05;
     cpu.mem.data[0x6000] = Instruction::LDA_ZP_X_IND;
     cpu.mem.data[0x6001] = 0x0A;
@@ -61,6 +64,8 @@ int main() {
     cpu.mem.data[0x6008] = Instruction::SEC;
     cpu.mem.data[0x6009] = Instruction::SBC_IM;
     cpu.mem.data[0x600A] = 1;
+
+    cpu.mem.data[0x600B] = Instruction::RTS;
 
     while(cpu.execute()) {
         cpu.printData();
