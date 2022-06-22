@@ -59,6 +59,7 @@ class CPU {
 
         void setStatusLDA();
         void setStatusLDX();
+        void setStatusLDY();
         void setStatusADC(byte toAdd, word result);
         void setStatusSBC(byte toAdd, word result);
 

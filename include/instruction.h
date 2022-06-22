@@ -23,6 +23,13 @@ class Instruction {
         static constexpr byte LDX_ABS   = 0xAE;     // 4 cycles
         static constexpr byte LDX_ABS_Y = 0xBE;     // 4+p cycles
 
+        // LDY
+        static constexpr byte LDY_IMM   = 0xA0;     // 2 cycles
+        static constexpr byte LDY_ZP    = 0xA4;     // 3 cycles
+        static constexpr byte LDY_ZP_X  = 0xB4;     // 4 cycles
+        static constexpr byte LDY_ABS   = 0xAC;     // 4 cycles
+        static constexpr byte LDY_ABS_X = 0xBC;     // 4+p cycles
+
         // JUMP
         static constexpr byte JMP_ABS = 0x4C;       // 3 cycles
         static constexpr byte JMP_ABS_IND = 0x6C;   // 5 cycles

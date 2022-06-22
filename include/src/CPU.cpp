@@ -102,6 +102,34 @@ bool CPU::execute() {
             cycles = 0;
             setStatusLDX();
         } return true;
+        case Instruction::LDY_IMM:{
+            y = fetchByte();
+            setStatusLDY();
+        } return true;
+        case Instruction::LDY_ZP:{
+            value = fetchByte();
+            y = readByte(value);
+            setStatusLDY();
+        } return true;
+        case Instruction::LDY_ZP_X:{
+            value = fetchByte();
+            value += x;
+            cycles--;
+            y = readByte(value);
+            setStatusLDY();
+        } return true;
+        case Instruction::LDY_ABS:{
+            word address = fetchWord();
+            y = readByte(address);
+            setStatusLDY();
+        } return true;
+        case Instruction::LDY_ABS_X:{
+            word address = fetchWord() + x;
+            y = readByte(address);
+            // Le nombre de cycles dépend de si la page est croisée
+            cycles = 0;
+            setStatusLDY();
+        } return true;
         case Instruction::JMP_ABS:{
             pc = fetchWord();
         } return true;
@@ -233,6 +261,11 @@ void CPU::setStatusLDA() {
 void CPU::setStatusLDX() {
     flags.bits.z = (x == 0);
     flags.bits.n = ((x & 0x80) > 0);
+}
+
+void CPU::setStatusLDY() {
+    flags.bits.z = (y == 0);
+    flags.bits.n = ((y & 0x80) > 0);
 }
 
 void CPU::setStatusADC(byte toAdd, word result) {
