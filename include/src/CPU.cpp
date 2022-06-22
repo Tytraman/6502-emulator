@@ -47,10 +47,28 @@ bool CPU::execute() {
             acc = readByte(address);
             setStatusLDA();
         } return true;
+        case Instruction::LDA_ZP_IND_Y_IDX:{
+            value = fetchByte();
+            word address = y;
+            address += readWord(value);
+            acc = readByte(address);
+            cycles = 0;
+            setStatusLDA();
+        } return true;
         case Instruction::LDA_ABS:{
             word address = fetchWord();
             acc = readByte(address);
             setStatusLDA();
+        } return true;
+        case Instruction::LDA_ABS_X:{
+            word address = fetchWord() + x;
+            acc = mem.data[address];
+            cycles = 0;
+        } return true;
+        case Instruction::LDA_ABS_Y:{
+            word address = fetchWord() + y;
+            acc = mem.data[address];
+            cycles = 0;
         } return true;
         case Instruction::JMP_ABS:{
             pc = fetchWord();

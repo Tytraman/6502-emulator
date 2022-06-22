@@ -27,45 +27,18 @@ int main() {
     CPU cpu(65536, instructions);
     cpu.reset();
     cpu.mem.data[0xFFFC] = Instruction::JMP_ABS;
-    cpu.mem.data[0xFFFD] = 0x0000;
-    cpu.mem.data[0xFFFE] = 0x0000;
+    cpu.mem.data[0xFFFD] = 0x00;
+    cpu.mem.data[0xFFFE] = 0xFF;
 
-    cpu.mem.data[0x0000] = Instruction::JMP_ABS_IND;
-    cpu.mem.data[0x0001] = 0x26;
-    cpu.mem.data[0x0002] = 0x62;
+    cpu.mem.data[0x0005] = 0x02;
+    cpu.mem.data[0x0006] = 0x66;
+    cpu.mem.data[0x6602] = 0x24;
+    cpu.mem.data[0x6603] = 0x25;
+    cpu.mem.data[0x6604] = 0x26;
 
-    cpu.mem.data[0x6226] = 0x00;
-    cpu.mem.data[0x6227] = 0x51;
-
-    cpu.mem.data[0x5100] = Instruction::LDA_ABS;
-    cpu.mem.data[0x5101] = 0x02;
-    cpu.mem.data[0x5102] = 0x00;
-
-    cpu.mem.data[0x5103] = Instruction::JSR;
-    cpu.mem.data[0x5104] = 0x00;
-    cpu.mem.data[0x5105] = 0x60;
-
-    cpu.mem.data[0x5106] = Instruction::LDA_IM;
-    cpu.mem.data[0x5107] = 0xBA;
-
-    cpu.x = 0x05;
-    cpu.mem.data[0x6000] = Instruction::LDA_ZP_X_IND;
-    cpu.mem.data[0x6001] = 0x0A;
-    cpu.mem.data[0x000F] = 0xCD;
-    cpu.mem.data[0x0010] = 0xDC;
-    cpu.mem.data[0xDCCD] = 127;
-
-    cpu.mem.data[0x6002] = Instruction::ADC_IM;
-    cpu.mem.data[0x6003] = 1;
-    cpu.mem.data[0x6004] = Instruction::ADC_IM;
-    cpu.mem.data[0x6005] = 128;
-    cpu.mem.data[0x6006] = Instruction::ADC_IM;
-    cpu.mem.data[0x6007] = 0;
-    cpu.mem.data[0x6008] = Instruction::SEC;
-    cpu.mem.data[0x6009] = Instruction::SBC_IM;
-    cpu.mem.data[0x600A] = 1;
-
-    cpu.mem.data[0x600B] = Instruction::RTS;
+    cpu.y = 2;
+    cpu.mem.data[0xFF00] = Instruction::LDA_ZP_IND_Y_IDX;
+    cpu.mem.data[0xFF01] = 0x05;
 
     while(cpu.execute()) {
         cpu.printData();

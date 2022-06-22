@@ -7,11 +7,14 @@ class Instruction {
 
     public:
         // LDA
-        static constexpr byte LDA_IM       = 0xA9;  // 2 cycles
-        static constexpr byte LDA_ZP       = 0xA5;  // 3 cycles
-        static constexpr byte LDA_ZP_X     = 0xB5;  // 4 cycles
-        static constexpr byte LDA_ZP_X_IND = 0xA1;  // 6 cycles
-        static constexpr byte LDA_ABS      = 0xAD;  // 4 cycles
+        static constexpr byte LDA_IM           = 0xA9;      // 2 cycles
+        static constexpr byte LDA_ZP           = 0xA5;      // 3 cycles
+        static constexpr byte LDA_ZP_X         = 0xB5;      // 4 cycles
+        static constexpr byte LDA_ZP_X_IND     = 0xA1;      // 6 cycles
+        static constexpr byte LDA_ZP_IND_Y_IDX = 0xB1;      // 5+p cycles
+        static constexpr byte LDA_ABS          = 0xAD;      // 4 cycles
+        static constexpr byte LDA_ABS_X        = 0xBD;      // 4+p cycles
+        static constexpr byte LDA_ABS_Y        = 0xB9;      // 4+p cycles
 
         // JUMP
         static constexpr byte JMP_ABS = 0x4C;       // 3 cycles
