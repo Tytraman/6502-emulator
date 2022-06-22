@@ -58,6 +58,7 @@ class CPU {
         byte negate(byte value) const;
 
         void setStatusLDA();
+        void setStatusLDX();
         void setStatusADC(byte toAdd, word result);
         void setStatusSBC(byte toAdd, word result);
 

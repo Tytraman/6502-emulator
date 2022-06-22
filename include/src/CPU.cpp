@@ -22,7 +22,7 @@ bool CPU::execute() {
     cycles = instructions[instruction].cycles - 1;
     switch(instruction) {
         default: return false;
-        case Instruction::LDA_IM:{
+        case Instruction::LDA_IMM:{
             value = fetchByte();
             acc = value;
             setStatusLDA();
@@ -62,13 +62,45 @@ bool CPU::execute() {
         } return true;
         case Instruction::LDA_ABS_X:{
             word address = fetchWord() + x;
-            acc = mem.data[address];
+            acc = readByte(address);
+            // Le nombre de cycles dépend de si la page est croisée
             cycles = 0;
+            setStatusLDA();
         } return true;
         case Instruction::LDA_ABS_Y:{
             word address = fetchWord() + y;
-            acc = mem.data[address];
+            acc = readByte(address);
+            // Le nombre de cycles dépend de si la page est croisée
             cycles = 0;
+            setStatusLDA();
+        } return true;
+        case Instruction::LDX_IMM:{
+            x = fetchByte();
+            setStatusLDX();
+        } return true;
+        case Instruction::LDX_ZP:{
+            value = fetchByte();
+            x = readByte(value);
+            setStatusLDX();
+        } return true;
+        case Instruction::LDX_ZP_Y:{
+            value = fetchByte();
+            value += y;
+            cycles--;
+            x = readByte(value);
+            setStatusLDX();
+        } return true;
+        case Instruction::LDX_ABS:{
+            word address = fetchWord();
+            x = readByte(address);
+            setStatusLDX();
+        } return true;
+        case Instruction::LDX_ABS_Y:{
+            word address = fetchWord() + y;
+            x = readByte(address);
+            // Le nombre de cycles dépend de si la page est croisée
+            cycles = 0;
+            setStatusLDX();
         } return true;
         case Instruction::JMP_ABS:{
             pc = fetchWord();
@@ -196,6 +228,11 @@ byte CPU::negate(byte value) const {
 void CPU::setStatusLDA() {
     flags.bits.z = (acc == 0 ? 1 : 0);
     flags.bits.n = ((acc & 0x80) > 0 ? 1 : 0);
+}
+
+void CPU::setStatusLDX() {
+    flags.bits.z = (x == 0);
+    flags.bits.n = ((x & 0x80) > 0);
 }
 
 void CPU::setStatusADC(byte toAdd, word result) {
