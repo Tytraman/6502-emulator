@@ -170,6 +170,34 @@ bool CPU::execute() {
             cycles--;
             writeByte(address, acc);
         } return true;
+        case Instruction::STX_ZP:{
+            value = fetchByte();
+            writeByte(value, x);
+        } return true;
+        case Instruction::STX_ZP_Y:{
+            value = fetchByte();
+            value += y;
+            cycles--;
+            writeByte(value, x);
+        } return true;
+        case Instruction::STX_ABS:{
+            word address = fetchWord();
+            writeByte(address, x);
+        } return true;
+        case Instruction::STY_ZP:{
+            value = fetchByte();
+            writeByte(value, y);
+        } return true;
+        case Instruction::STY_ZP_X:{
+            value = fetchByte();
+            value += x;
+            cycles--;
+            writeByte(value, y);
+        } return true;
+        case Instruction::STY_ABS:{
+            word address = fetchWord();
+            writeByte(address, y);
+        } return true;
         case Instruction::JMP_ABS:{
             pc = fetchWord();
         } return true;

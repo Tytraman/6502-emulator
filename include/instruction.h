@@ -39,6 +39,16 @@ class Instruction {
         static constexpr byte STA_ZP_X_IND     = 0x81;      // 6 cycles
         static constexpr byte STA_ZP_IND_Y_IDX = 0x91;      // 6 cycles
 
+        // STX
+        static constexpr byte STX_ZP   = 0x86;      // 3 cycles
+        static constexpr byte STX_ZP_Y = 0x96;      // 4 cycles
+        static constexpr byte STX_ABS  = 0x8E;      // 4 cycles
+
+        // STY
+        static constexpr byte STY_ZP   = 0x84;      // 3 cycles
+        static constexpr byte STY_ZP_X = 0x94;      // 4 cycles
+        static constexpr byte STY_ABS  = 0x8C;      // 4 cycles
+
         // JUMP
         static constexpr byte JMP_ABS = 0x4C;       // 3 cycles
         static constexpr byte JMP_ABS_IND = 0x6C;   // 5 cycles
