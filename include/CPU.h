@@ -49,6 +49,9 @@ class CPU {
         byte readByte(word address);
         word readWord(word address);
 
+        void writeByte(word address, byte value);
+        void writeWord(word address, word value);
+
         byte readStackByte();
         word readStackWord();
 

@@ -41,7 +41,7 @@ bool CPU::execute() {
         } return true;
         case Instruction::LDA_ZP_X_IND:{
             value = fetchByte();
-            x += value;
+            value += x;
             cycles--;
             word address = readWord(x);
             acc = readByte(address);
@@ -130,6 +130,46 @@ bool CPU::execute() {
             cycles = 0;
             setStatusLDY();
         } return true;
+        case Instruction::STA_ZP:{
+            value = fetchByte();
+            writeByte(value, acc);
+        } return true;
+        case Instruction::STA_ZP_X:{
+            value = fetchByte();
+            value += x;
+            cycles--;
+            writeByte(value, acc);
+        } return true;
+        case Instruction::STA_ABS:{
+            word address = fetchWord();
+            writeByte(address, acc);
+        } return true;
+        case Instruction::STA_ABS_X:{
+            word address = fetchWord();
+            address += x;
+            cycles--;
+            writeByte(address, acc);
+        } return true;
+        case Instruction::STA_ABS_Y:{
+            word address = fetchWord();
+            address += y;
+            cycles--;
+            writeByte(address, acc);
+        } return true;
+        case Instruction::STA_ZP_X_IND:{
+            value = fetchByte();
+            value += x;
+            cycles--;
+            word address = readWord(value);
+            writeByte(address, acc);
+        } return true;
+        case Instruction::STA_ZP_IND_Y_IDX:{
+            value = fetchByte();
+            word address = readWord(value);
+            address += y;
+            cycles--;
+            writeByte(address, acc);
+        } return true;
         case Instruction::JMP_ABS:{
             pc = fetchWord();
         } return true;
@@ -217,6 +257,17 @@ word CPU::readWord(word address) {
     data |= (word) (mem.data[address + 1] << 8);
     cycles -= 2;
     return data;
+}
+
+void CPU::writeByte(word address, byte value) {
+    mem.data[address] = value;
+    cycles--;
+}
+
+void CPU::writeWord(word address, word value) {
+    mem.data[address]     = value & 0xFF;
+    mem.data[address + 1] = (value >> 8) & 0xFF;
+    cycles -= 2;
 }
 
 byte CPU::readStackByte() {

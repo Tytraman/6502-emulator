@@ -30,19 +30,20 @@ int main() {
     cpu.mem.data[0xFFFD] = 0x00;
     cpu.mem.data[0xFFFE] = 0xFF;
 
-    cpu.mem.data[0x0005] = 0x02;
-    cpu.mem.data[0x0006] = 0x66;
-    cpu.mem.data[0x6602] = 0x24;
-    cpu.mem.data[0x6603] = 0x25;
-    cpu.mem.data[0x6604] = 0x26;
+    cpu.acc = 0x75;
+    cpu.x = 0x01;
+    cpu.mem.data[0xFF00] = Instruction::STA_ZP_IND_Y_IDX;
+    cpu.mem.data[0xFF01] = 0x05;
 
     cpu.y = 2;
-    cpu.mem.data[0xFF00] = Instruction::LDA_ZP_IND_Y_IDX;
-    cpu.mem.data[0xFF01] = 0x05;
+    cpu.mem.data[0x0005] = 0x00;
+    cpu.mem.data[0x0006] = 0xCC;
 
     while(cpu.execute()) {
         cpu.printData();
     }
+
+    cpu.mem.printPage(0xCC);
 
     printf("Au revoir !\n");
     return 0;
