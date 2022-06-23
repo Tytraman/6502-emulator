@@ -227,6 +227,21 @@ bool CPU::execute() {
             cycles--;
             setStatusLDA();
         } return true;
+        case Instruction::PHA:{
+            writeStackByte(acc);
+        } return true;
+        case Instruction::PHP:{
+            writeStackByte(flags.all);
+        } return true;
+        case Instruction::PLA:{
+            acc = readStackByte();
+            setStatusLDA();
+            cycles = 0;
+        } return true;
+        case Instruction::PLP:{
+            flags.all = readStackByte();
+            cycles = 0;
+        } return true;
         case Instruction::JMP_ABS:{
             pc = fetchWord();
         } return true;
@@ -238,7 +253,7 @@ bool CPU::execute() {
             word address = fetchWord();
             writeStackWord(pc - 1);
             pc = address;
-            cycles--;
+            cycles = 0;
         } return true;
         case Instruction::ADC_IM:{
             value = fetchByte();
@@ -328,33 +343,33 @@ void CPU::writeWord(word address, word value) {
 }
 
 byte CPU::readStackByte() {
-    byte data = mem.data[sp];
     sp++;
+    byte data = mem.data[0x0100 | sp];
     cycles--;
     return data;
 }
 
 word CPU::readStackWord() {
-    word data = mem.data[sp];
     sp++;
-    data |= (word) (mem.data[sp] << 8);
+    word data = mem.data[0x0100 | sp];
     sp++;
+    data |= (word) (mem.data[0x0100 | sp] << 8);
     cycles -= 2;
     return data;
 }
 
 void CPU::writeStackByte(byte value) {
+    mem.data[0x0100 | sp] = value;
     sp--;
-    mem.data[sp] = value;
-    cycles--;
+    cycles -= 2;
 }
 
 void CPU::writeStackWord(word value) {
+    mem.data[0x0100 | sp] = value >> 8;
     sp--;
-    mem.data[sp] = value >> 8;
+    mem.data[0x0100 | sp] = value & 0x00FF;
     sp--;
-    mem.data[sp] = value & 0x00FF;
-    cycles -= 2;
+    cycles -= 4;
 }
 
 byte CPU::negate(byte value) const {

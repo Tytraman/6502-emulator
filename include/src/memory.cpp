@@ -25,7 +25,7 @@ void Memory::printStack() const {
     while(1) {
         if(count == 0)
             printf("| ");
-        printf("%02x ", data[i]);
+        printf("%02x ", data[0x0100 | i]);
         if(count == 15) {
             printf("|\n");
             count = 0;

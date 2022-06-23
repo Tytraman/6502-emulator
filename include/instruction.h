@@ -67,15 +67,27 @@ class Instruction {
         // TYA
         static constexpr byte TYA = 0x98;       // 2 cycles
 
+        // PHA
+        static constexpr byte PHA = 0x48;       // 3 cycles
+
+        // PHP
+        static constexpr byte PHP = 0x08;       // 3 cycles
+
+        // PLA
+        static constexpr byte PLA = 0x68;       // 4 cycles
+
+        // PLP
+        static constexpr byte PLP = 0x28;       // 4 cycles
+
         // JUMP
         static constexpr byte JMP_ABS = 0x4C;       // 3 cycles
         static constexpr byte JMP_ABS_IND = 0x6C;   // 5 cycles
         static constexpr byte JSR = 0x20;           // 6 cycles
 
-        // Add Memory to Accumulator with Carry
+        // ADC
         static constexpr byte ADC_IM = 0x69;    // 2 cycles
 
-        // Substract Memory from Accumulator with Borrow
+        // SBC
         static constexpr byte SBC_IM = 0xE9;    // 2 cycles
 
         // Decimal Flag
