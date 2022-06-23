@@ -198,6 +198,35 @@ bool CPU::execute() {
             word address = fetchWord();
             writeByte(address, y);
         } return true;
+        case Instruction::TAX:{
+            x = acc;
+            cycles--;
+            setStatusLDX();
+        } return true;
+        case Instruction::TAY:{
+            y = acc;
+            cycles--;
+            setStatusLDY();
+        } return true;
+        case Instruction::TSX:{
+            x = mem.data[sp];
+            cycles--;
+            setStatusLDX();
+        } return true;
+        case Instruction::TXA:{
+            acc = x;
+            cycles--;
+            setStatusLDA();
+        } return true;
+        case Instruction::TXS:{
+            mem.data[sp] = x;
+            cycles--;
+        } return true;
+        case Instruction::TYA:{
+            acc = y;
+            cycles--;
+            setStatusLDA();
+        } return true;
         case Instruction::JMP_ABS:{
             pc = fetchWord();
         } return true;

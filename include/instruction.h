@@ -49,6 +49,24 @@ class Instruction {
         static constexpr byte STY_ZP_X = 0x94;      // 4 cycles
         static constexpr byte STY_ABS  = 0x8C;      // 4 cycles
 
+        // TAX
+        static constexpr byte TAX = 0xAA;       // 2 cycles
+
+        // TAY
+        static constexpr byte TAY = 0xA8;       // 2 cycles
+
+        // TSX
+        static constexpr byte TSX = 0xBA;       // 2 cycles
+
+        // TXA
+        static constexpr byte TXA = 0x8A;       // 2 cycles
+
+        // TXS
+        static constexpr byte TXS = 0x9A;       // 2 cycles
+
+        // TYA
+        static constexpr byte TYA = 0x98;       // 2 cycles
+
         // JUMP
         static constexpr byte JMP_ABS = 0x4C;       // 3 cycles
         static constexpr byte JMP_ABS_IND = 0x6C;   // 5 cycles
